@@ -541,6 +541,19 @@ var Diagrams = (function (diagrams) {
                 return traverse((TreeRoot), finalSource);
             },
 
+            generateTree: function () {
+                var source =  '@Source (protocol="http", host="localhost", port=8080)\n' +
+                             '@Api (tags = {"stock_info","stock_update"}, description = "Rest api for do operations on admin", produces = MediaType.APPLICATION_JSON)\n' +
+                             'package com.sample;\n' +
+                              '@Path ("/stock")\n' +
+                              '@GET\n' +
+                              '@PUT\n' +
+                              '@POST\n' +
+                             'resource passthrough (message m) {' +
+                             'log("Test");' +
+                             '}';
+            },
+
             reloadDiagramArea: function () {
                 defaultView.model.resourceLifeLineCounter(0);
                 defaultView.model.endpointLifeLineCounter(0);
