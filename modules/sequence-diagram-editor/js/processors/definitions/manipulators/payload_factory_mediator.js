@@ -41,9 +41,60 @@ var Processors = (function (processors) {
             }
             return cloneCallBack;
         },
-        parameters: [],
-        getMySubTree: function (model) {
-            return new TreeNode("payloadFactoryMediator", "payloadFactoryMediator", "payloadFactory {", "}");
+        parameters: [
+            {
+                key: "configurationFile",
+                value: "Configuration file"
+            },
+            {
+                key: "message",
+                value: "Message"
+            },
+            {
+                key: "description",
+                value: "Description"
+            }
+        ],
+        propertyPaneSchema: [
+            {
+                key: "configurationFile",
+                text: "Configuration File"
+            },
+            {
+                key: "message",
+                text: "Message"
+            },
+            {
+                key: "description",
+                text: "Description"
+            }
+        ],
+        utils: {
+            getMyPropertyPaneSchema : function () {
+                return Processors.manipulators.PayLoadFactoryMediator.propertyPaneSchema;
+            },
+            getMyParameters: function (model) {
+                return model.attributes.parameters;
+            },
+            saveMyProperties: function (model, inputs) {
+                model.attributes.parameters = [
+                    {
+                        key: "configurationFile",
+                        value: inputs.configurationFile.value
+                    },
+                    {
+                        key: "message",
+                        value: inputs.message.value
+                    },
+                    {
+                        key: "description",
+                        value: inputs.description.value
+                    }
+                ];
+            },
+            getMySubTree: function (model) {
+                return new TreeNode("payloadFactoryMediator", "payloadFactoryMediator", "payloadFactory {", "}");
+            }
         }
     };
 

@@ -25,7 +25,7 @@ var Processors = (function (processors) {
         id: "LogMediator",
         title: "Logger",
         icon: "images/tool-icons/log.svg",
-        colour : "#2980b9",
+        colour : "#ffffff",
         type : "UnitProcessor",
         dragCursorOffset : { left: 24, top: -5 },
         createCloneCallback : function(view){
@@ -41,85 +41,108 @@ var Processors = (function (processors) {
             }
             return cloneCallBack;
         },
-        parameters: [
+        propertyPaneSchema: [
             {
-                key: "level",
-                label: "Log Level",
-                required: true,
-                value: {
-                    type: "String",
-                    values: [
-                        {key: "full", label: "FULL"}, {key: "simple", label: "SIMPLE"},
-                        {key: "headers", label: "HEADERS"}, {key: "custom", label: "CUSTOM"}
-                    ]
-                }
-
+                key: "messageRef",
+                text: "Message Reference"
             },
             {
-                key: "category",
-                label: "Log Category",
-                required: true,
-                value: {
-                    type: "String",
-                    values: [
-                        {key: "trace", label: "Trace"}, {key: "debug", label: "DEBUG"}, {key: "info", label: "INFO"}
-                        , {key: "warn", label: "WARN"}, {key: "error", label: "ERROR"}, {key: "fatal", label: "FATAL"}
-                    ]
-                }
+                key: "message",
+                text: "Log message"
             },
             {
-                key: "separator",
-                label: "Log Separator",
-                required: false,
-                value: {
-                    type: "String"
-                }
+                key: "logLevel",
+                dropdown: "Log Level",
+                values: ["simple", "custom", "headers", "full"]
+            },
+            {
+                key: "logCategory",
+                dropdown: "Log Category",
+                values: ["info", "error", "warn", "fatal", "debug", "trace"]
             },
             {
                 key: "description",
-                label: "Log Description",
-                required: false,
-                value: {
-                    type: "String"
-                }
-            },
-            {
-                key: "property",
-                label: "Properties",
-                required: false,
-                value: {
-                    type: "Array",
-                    parameters: [
-                        {
-                            key: "name",
-                            label: "Property Name",
-                            required: true,
-                            value: {
-                                type: "String"
-                            }
-                        },
-                        {
-                            key: "value",
-                            label: "Property Value",
-                            required: false,
-                            value: {
-                                type: "String"
-                            }
-                        },
-                        {
-                            key: "expression",
-                            label: "Property Expression",
-                            required: false,
-                            value: {
-                                type: "String"
-                            }
-                        }
-                    ]
-                }
+                text: "Description"
             }
         ],
-        getMySubTree: function (model) {
-            return new TreeNode("LogMediator", "LogMediator", "log(\"Test\"", ");");
+        parameters: [
+            {
+                key: "messageRef",
+                value: "m"
+            },
+            {
+                key: "message",
+                value: "Log message"
+            },
+            {
+                key: "logLevel",
+                value: "simple"
+            },
+            {
+                key: "logCategory",
+                value: "info"
+            },
+            {
+                key: "description",
+                value: "Description"
+            }
+        ],
+        utils : {
+            getMyPropertyPaneSchema : function () {
+                return Processors.manipulators.LogMediator.propertyPaneSchema;
+            },
+            getMyParameters: function (model) {
+                return model.attributes.parameters;
+            },
+            saveMyProperties: function (model, inputs) {
+                var selectedLogLevel;
+                var selectedLogCategory;
+                if (inputs.logLevel.value !== "") {
+                    selectedLogLevel = inputs.logLevel.value;
+                } else {
+                    selectedLogLevel = model.attributes.parameters[1].value;
+                }
+                if (inputs.logCategory.value !== "") {
+                    selectedLogCategory = inputs.logCategory.value;
+                } else {
+                    selectedLogCategory = model.attributes.parameters[2].value;
+                }
+                model.attributes.parameters = [
+                    {
+                        key: "messageRef",
+                        value: inputs.messageRef.value
+                    },
+                    {
+                        key: "message",
+                        value: inputs.message.value
+                    },
+                    {
+                        key: "logLevel",
+                        value: selectedLogLevel
+                    },
+                    {
+                        key: "logCategory",
+                        value: selectedLogCategory
+                    },
+                    {
+                        key: "description",
+                        value: inputs.description.value
+                    }
+                ];
+            },
+            getMySubTree: function (model) {
+                var parameters = model.attributes.parameters;
+                var log_configStart = "log(level=\"" + parameters[1].value + "\"," + "status=\"" + parameters[0].value + "\"";
+                return new TreeNode("LogMediator", "LogMediator", log_configStart, ");");
+            },
+            outputs: false,
+            getInputParams: function (model) {
+                var inputParams = [];
+                inputParams[0] = model.attributes.parameters[0];
+                inputParams[1] = model.attributes.parameters[1];
+
+                return inputParams;
+            }
         }
     };
 

@@ -25,8 +25,9 @@ var Processors = (function (processors) {
         id: "TryBlockMediator",
         title: "Try Block",
         icon: "images/tool-icons/tryblock.svg",
-        colour : "#998844",
+        colour : "#ffffff",
         type : "ComplexProcessor",
+        containableElements: [{container:"tryContainer",children:[{title:"Try"}]},{container:"catchContainer",children:[{title:"Catch"}]}],
         dragCursorOffset : { left: 50, top: -5 },
         createCloneCallback : function(view){
             function cloneCallBack() {
@@ -41,29 +42,90 @@ var Processors = (function (processors) {
             }
             return cloneCallBack;
         },
-        parameters: [],
-        getMySubTree: function (model) {
-            // Generate Subtree for the try block
-            var tryBlock = model.get('containableProcessorElements').models[0];
-            var tryBlockNode = new TreeNode("TryBlock", "TryBlock", "try{", "}");
-            for (var itr = 0; itr < tryBlock.get('children').models.length; itr++) {
-                var child = tryBlock.get('children').models[itr];
-                tryBlockNode.getChildren().push(child.get('getMySubTree').getMySubTree(child));
+        parameters: [
+            {
+                key: "exception",
+                value: "Exception"
+            },
+            {
+                key: "description",
+                value: "Description"
             }
-
-            // Generate the Subtree for the catch block
-            var catchBlock = model.get('containableProcessorElements').models[1];
-            var catchBlockNode = new TreeNode("CatchBlock", "CatchBlock", "catch(exception e){", "}");
-            for (var itr = 0; itr < catchBlock.get('children').models.length; itr++) {
-                var child = catchBlock.get('children').models[itr];
-                catchBlockNode.getChildren().push(child.get('getMySubTree').getMySubTree(child));
+        ],
+        propertyPaneSchema: [
+            {
+                key: "exception",
+                text: "Exception"
+            },
+            {
+                key: "description",
+                text: "Description"
             }
-            var tryCatchNode = new TreeNode("TryCatchMediator", "TryCatchMediator", "", "");
-            tryCatchNode.getChildren().push(tryBlockNode);
-            tryCatchNode.getChildren().push(catchBlockNode);
+        ],
+        utils: {
+            getMyPropertyPaneSchema : function () {
+                return Processors.flowControllers.TryBlockMediator.propertyPaneSchema;
+            },
+            getMyParameters: function (model) {
+                return model.attributes.parameters;
+            },
+            saveMyProperties: function (model, inputs) {
+                model.attributes.parameters = [
+                    {
+                        key: "exception",
+                        value: inputs.exception.value
+                    },
+                    {
+                        key: "description",
+                        value: inputs.description.value
+                    }
+                ];
+            },
+            getMySubTree: function (model) {
+                // Generate Subtree for the try block
+                var tryBlock = model.get('containableProcessorElements').models[0];
+                var tryBlockNode = new TreeNode("TryBlock", "TryBlock", "try{", "}");
+                for (var itr = 0; itr < tryBlock.get('children').models.length; itr++) {
+                    var child = tryBlock.get('children').models[itr];
 
-            return tryCatchNode;
+                    if (child instanceof SequenceD.Models.MessagePoint && child.get('direction') == 'outbound') {
+                        var endpoint = child.get('message').get('destination').get('parent').attributes.parameters[0].value;
+                        var uri = child.get('message').get('destination').attributes.parameters[1].value;
+                        // When we define the properties, need to extract the endpoint from the property
+                        definedConstants["HTTPEP"] = {name: endpoint, value: uri};
+                        var l = new TreeNode("InvokeMediator", "InvokeMediator", ("response = invoke(endpointKey=" +
+                        endpoint + ", messageKey=m)"), ";");
+                        tryBlockNode.getChildren().push(l);
+                    } else {
+                        tryBlockNode.getChildren().push(child.get('utils').getMySubTree(child));
+                    }
+                }
 
+                // Generate the Subtree for the catch block
+                var catchBlock = model.get('containableProcessorElements').models[1];
+                var catchBlockNode = new TreeNode("CatchBlock", "CatchBlock", "catch(Exception e){", "}");
+                for (var itr = 0; itr < catchBlock.get('children').models.length; itr++) {
+                    var child = catchBlock.get('children').models[itr];
+
+                    if (child instanceof SequenceD.Models.MessagePoint && child.get('direction') == 'outbound') {
+                        var endpoint = child.get('message').get('destination').get('parent').attributes.parameters[0].value;
+                        var uri = child.get('message').get('destination').get('parent').attributes.parameters[1].value;
+                        // When we define the properties, need to extract the endpoint from the property
+                        definedConstants["HTTPEP"] = {name: endpoint, value: uri};
+                        var l = new TreeNode("InvokeMediator", "InvokeMediator", ("response = invoke(endpointKey=" +
+                        endpoint + ", messageKey=m)"), ";");
+                        catchBlockNode.getChildren().push(l);
+                    } else {
+                        catchBlockNode.getChildren().push(child.get('utils').getMySubTree(child));
+                    }
+                }
+                var tryCatchNode = new TreeNode("TryCatchMediator", "TryCatchMediator", "", "");
+                tryCatchNode.getChildren().push(tryBlockNode);
+                tryCatchNode.getChildren().push(catchBlockNode);
+
+                return tryCatchNode;
+
+            }
         }
     };
 

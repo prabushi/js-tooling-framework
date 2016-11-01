@@ -20,6 +20,18 @@ var D3Utils = (function (d3_utils) {
 
     var d3Ref = undefined;
 
+    var heights = {
+        textBox: 30,
+        before: 20,
+        after: 36,
+        label: 12,
+        label_textBox: 10,
+        textBox_label: 24,
+        textBox_checkbox: 24,
+        checkbox: 13,
+        checkbox_checkbox: 35
+    };
+
     var circle = function (cx, cy, r, parent) {
         parent = parent || d3Ref;
         return parent.append("circle")
@@ -43,29 +55,29 @@ var D3Utils = (function (d3_utils) {
 
         rx = rx || 0;
         ry = ry || 0;
-        var titleRect = parent.append("rect")
-            .attr("id", "titleRect")
-            .attr("x", x)
-            .attr("y", y)
-            .attr("width", width)
-            .attr("height", height)
-            .attr("fill", colour)
-            .attr("stroke", "black")
-            .attr("stroke-width", 2)
-            .attr("fill-opacity", 0.2)
-            .attr("rx", rx)
-            .attr("ry", ry);
         var containerRect = parent.append("rect")
             .attr("id", "containerRect")
             .attr("x", x)
             .attr("y", y)
             .attr("width", containerWidth)
             .attr("height", containerHeight)
-            .attr("fill", "grey")
+            .attr("fill", "#ffffff")
             .attr("stroke", "black")
             .attr("stroke-width", 2)
             .attr("rx", rx)
-            .attr("fill-opacity", 0.2)
+            .attr("fill-opacity",.4)
+            .attr("ry", ry);
+        var titleRect = parent.append("rect")
+            .attr("id", "titleRect")
+            .attr("x", x)
+            .attr("y", y)
+            .attr("width", width)
+            .attr("height", height)
+            .attr("fill", "#ffffff")
+            .attr("stroke", "black")
+            .attr("stroke-width", 2)
+            .attr("fill-opacity", 1)
+            .attr("rx", rx)
             .attr("ry", ry);
         var text = parent.append("text")
             .attr("x", x + 20)
@@ -93,6 +105,44 @@ var D3Utils = (function (d3_utils) {
             .attr("rx", rx)
             .attr("ry", ry);
     };
+    var genericRect = function (x, y, width, height, rx, ry, parent, colour, textModel) {
+        parent = parent || d3Ref;
+        // get TextModel and if dynamicRectWidth is not 130 add that as width
+        var modelId = textModel.cid;
+        var dynamicWidth = textModel.dynamicRectWidth();
+        if(dynamicWidth != 130){
+            width = dynamicWidth;
+        }
+        rx = rx || 0;
+        ry = ry || 0;
+        return parent.append("rect")
+            .attr("x", x)
+            .attr("y", y)
+            .attr("width", width)
+            .attr("height", height)
+            .attr("fill", colour || "steelblue")
+            .attr("stroke", "black")
+            .attr("stroke-width", 2)
+            .attr("rx", rx)
+            .attr("ry", ry)
+            .attr("id",modelId);
+    };
+
+    var genericCenteredRect = function (center, width, height, rx, ry, parent, colour, textModel) {
+        parent = parent || d3Ref;
+        rx = rx || 0;
+        ry = ry || 0;
+        return parent.draw.genericRect(center.x() - width / 2, center.y() - height / 2, width, height, rx, ry, parent, colour, textModel);
+    };
+//GENERIC TEXT BOX CREATION
+    var genericTextRect = function (center,width,height,rx,ry,textContent,x,y,parent,colour, textModel){
+        parent = parent || d3Ref;
+
+        var rect =parent.draw.genericRect(center.x() - width / 2, center.y() - height / 2, width, height, rx, ry, parent, colour, textModel);
+        var text = rect.draw.genericTextElement(center.x(), center.y(), textContent, rect,txtModel)
+            .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle');
+        return parent;
+    };
 
     var rect = function (x, y, width, height, rx, ry, parent, colour) {
         parent = parent || d3Ref;
@@ -104,7 +154,8 @@ var D3Utils = (function (d3_utils) {
             .attr("y", y)
             .attr("width", width)
             .attr("height", height)
-            .attr("fill", colour || "steelblue")
+            .attr("fill", colour || "#000000")
+            .attr("stroke", "black")
             .attr("stroke-width", 2)
             .attr("rx", rx)
             .attr("ry", ry);
@@ -153,7 +204,29 @@ var D3Utils = (function (d3_utils) {
     var editableText = function (x, y, text) {
 
     };
+    //TODO:
+    var genericTextElement = function (x, y, textContent, parent,txtModel) {
+        parent = parent || d3Ref;
+        var modelId = txtModel.cid;
+        var dynamicPosition = txtModel.dynamicTextPosition();
+        if(dynamicPosition != undefined){
+            x = dynamicPosition;
+        }
 
+        return parent.append("text")
+            .attr("x", x)
+            .attr("y", y)
+            .attr("id",modelId)
+            .text(function () {
+                return textContent;
+            });
+    };
+//TODO:TEST
+    var genericCenteredText = function (center, textContent, parent,txtModel) {
+        parent = parent || d3Ref;
+        return parent.draw.genericTextElement(center.x(), center.y(), textContent, parent,txtModel)
+            .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle');
+    };
     var textElement = function (x, y, textContent, parent) {
         parent = parent || d3Ref;
         return parent.append("text")
@@ -164,12 +237,243 @@ var D3Utils = (function (d3_utils) {
             });
     };
 
+    var inputTriangle = function (x, y, parent) {
+        parent = parent || d3Ref;
+        var points = "" + x + "," + (y - 5) + " " + (x + 5) + "," + (y) + " " + x + "," + (y + 5);
+        return parent.append("polyline")
+            .attr("points", points);
+    };
+
+    var outputTriangle = function (x, y, parent) {
+        parent = parent || d3Ref;
+        var points = "" + x + "," + y + " " + (x + 5) + "," + (y - 5) + " " + (x + 5) + "," + (y + 5);
+        return parent.append("polyline")
+            .attr("points", points);
+    };
+
+    var dashedLine = function (x1,y1, x2, y2, color, parent) {
+        parent = parent || d3Ref;
+        return parent.append("line")
+            .attr("x1", x1)
+            .attr("y1", y1)
+            .attr("x2", x2)
+            .attr("y2", y2)
+            .attr("stroke", color)
+            .attr("stroke-width",.5)
+            .attr("stroke-dasharray", "4, 3");
+    };
+
+
     var centeredText = function (center, textContent, parent) {
         parent = parent || d3Ref;
         return parent.draw.textElement(center.x(), center.y(), textContent, parent)
             .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle');
     };
 
+    /**
+     * Create the properties form by appending form elements such as textbox, label, checkbox etc.
+     * @param parent SVG parent element of the form
+     * @param parameters Model parameters of the selected element
+     * @param propertyPaneSchema Property rendering schema of the selected element
+     * @param rect Property window rectangle
+     * @returns {*} Created form element
+     */
+    var form = function (parent, parameters, propertyPaneSchema, rect) {
+        parent = parent || d3Ref;
+
+        var foreignObject = parent.append("foreignObject")
+            .attr("x", 23)
+            .attr("y", 20)
+            .attr("width", "240")
+            .attr("height", "100%");
+
+        var form = foreignObject.append("xhtml:form")
+            .attr("id", "property-form")
+            .attr("autocomplete", "on");
+
+        var previous = null;
+        var next = null;
+        var rectangleHeight = heights.before;
+
+        for (var i = 0; i < propertyPaneSchema.length; i++) {
+            var property = propertyPaneSchema[i];
+
+            if (property.text) {
+                //append a label for the textbox
+                next = "label";
+                rectangleHeight = getCurrentRectHeight(rectangleHeight, previous, next);
+                var label = appendLabel(form, property.text);
+                label.attr("style", "display: block;");
+                //append a textbox
+                appendTextBox(form, parameters[i].value, property.key);
+                rectangleHeight += (heights.label + heights.label_textBox + heights.textBox);
+                previous = "textbox";
+
+            } else if (property.dropdown) {
+                //append a label before dropdown
+                next = "label";
+                rectangleHeight = getCurrentRectHeight(rectangleHeight, previous, next);
+                var label = appendLabel(form, property.dropdown);
+                label.attr("style", "display: block;");
+                //append the dropdown
+                var selected = parameters[i].value;
+                var dropdownValues = [];
+                property.values.forEach(function (value, index) {
+                    if (value === selected) {
+                        dropdownValues[index] = {value: value.toLowerCase(), text: value, selected: true};
+                    } else {
+                        dropdownValues[index] = {value: value.toLowerCase(), text: value};
+                    }
+                });
+                appendDropdown(form, dropdownValues, property.key, i, selected);
+                rectangleHeight += (heights.label + heights.label_textBox + heights.textBox);
+                previous = "dropdown";
+
+            } else if (property.checkbox) {
+                //append a checkbox
+                next = "checkbox";
+                rectangleHeight = getCurrentRectHeight(rectangleHeight, previous, next);
+                appendCheckBox(form, property, parameters[i].value);
+                rectangleHeight += heights.checkbox;
+                previous = "checkbox";
+
+            }
+        }
+        rectangleHeight += heights.after;
+        rect.attr("height", rectangleHeight);
+        return form;
+    };
+
+    var getCurrentRectHeight = function (currentHeight, previous, next) {
+        if (previous === "textbox" || previous === "dropdown") {
+            if (next === "label") {
+                return currentHeight + heights.textBox_label;
+
+            } else if (next === "checkbox") {
+                return currentHeight + heights.textBox_checkbox;
+
+            }
+
+        } else if (previous === "checkbox") {
+            if (next === "checkbox") {
+                return currentHeight + heights.checkbox_checkbox
+            }
+
+        } else if (!previous) {
+            return currentHeight;
+
+        }
+    };
+    var updateParentOnLayoutChange = function () {
+        if (defaultView.selectedNode.attributes.textModel != null) {
+            model = defaultView.selectedNode.attributes.textModel;
+            // updating any parent elements if exists:TODO: can be updated to be fired onBlur
+            if (model.hasParent === true) {
+                // This could be made into a objectList if there are multiple
+                var parentModel = model.parentObject();
+                eventManager.notifyParent(parentModel, model);
+            }
+        }
+    }
+    /**
+     * Save properties in selected element's model by calling saveMyProperties method in respective elements
+     */
+    var saveProperties = function () {
+        var inputs = $('#property-form')[0].getElementsByTagName("input");
+        defaultView.selectedNode.get("utils").saveMyProperties(defaultView.selectedNode, inputs);
+        //TODO FOR TEXT GENERIC
+        if(defaultView.selectedNode.attributes.textModel != null){
+            var int = Number(7) || 7.7;
+            var dlength =  ((inputs.title.value.length+1) * 8);
+            var txtm = defaultView.selectedNode.attributes.textModel;
+            txtm.textChanged(dlength);
+        }
+        //render title in selected lifeline
+        if (inputs.title) {
+            resetMainElementTitle(inputs.title.value);
+        }
+    };
+
+    var resetMainElementTitle = function (title) {
+        diagram.selectedMainElementText.top.text(title);
+        diagram.selectedMainElementText.bottom.text(title);
+    };
+
+    var appendCheckBox = function (parent, property, checked) {
+        var checkbox = parent.append("xhtml:input")
+            .attr("class", "property-checkbox")
+            .attr("type", "checkbox")
+            .attr("name", property.key);
+        if (checked) {
+            checkbox.attr("checked", true);
+        }
+
+        checkbox.on("change", saveProperties);
+        appendLabel(parent, property.checkbox);
+        parent.append("br");
+        parent.append("br");
+    };
+
+    var appendTextBox = function (parent, value, name) {
+        var textBox = parent.append("input")
+            .attr("class", "property-textbox")
+            .attr("type", "text")
+            .attr("name", name)
+            .attr("value", value);
+
+        textBox.on("keyup", saveProperties)
+            .on("dblclick", function () {
+                this.select();
+            });
+        textBox.on("blur", updateParentOnLayoutChange);
+        parent.append("br");
+        parent.append("br");
+    };
+
+    var appendLabel = function (parent, value) {
+        return parent.append("label")
+            .attr("class", "property-label")
+            .text(value);
+    };
+
+    var appendDropdown = function (parent, optionsList, name, count, selectedValue) {
+        var input = parent.append("input")
+            .attr("name", name)
+            .attr("id", name)
+            .attr("class", "property-dropdown")
+            .attr("list", "dropdown-" + count)
+            .attr("value", selectedValue);
+
+        var datalist = input.append("datalist")
+            .attr("id", "dropdown-" + count);
+
+        for (var i = 0; i < optionsList.length; i++) {
+            var option = optionsList[i];
+            datalist.append("option")
+                .attr("label", option.value)
+                .attr("class", "property-option")
+                .attr("value", option.value);
+            if (option.selected) {
+                input._groups[0][0].value = option.value;
+            }
+        }
+
+        parent.append("br");
+        parent.append("br");
+        var currentValue = "";
+        input.on("click", function () {
+                if (this.value !== "") {
+                    currentValue = this.value;
+                }
+                this.value = "";
+            })
+            .on("change", saveProperties)
+            .on("blur", function () {
+                if (this.value === "") {
+                    this.value = currentValue;
+                }
+            })
+    };
 
     var group = function (parent) {
         parent = parent || d3Ref;
@@ -184,6 +488,19 @@ var D3Utils = (function (d3_utils) {
             .attr("class", opts.class);
     };
 
+    var propertySVG = function (opts, parent) {
+        parent = parent || d3Ref;
+        return parent.append("svg")
+            .attr("id", opts.id)
+            .attr("height", opts.height)
+            .attr("width", opts.width)
+            .attr("class", opts.class)
+            .attr("x", opts.x)
+            .attr("y", opts.y)
+            .attr("fill", opts.color)
+            .attr("z-index", 1500);
+    };
+
     // FIXME: refactor to use native window methods
     var regroup = function (elements) {
         var g = d3Ref.append("g");
@@ -195,6 +512,13 @@ var D3Utils = (function (d3_utils) {
         return g;
     };
 
+    var propertyRect = function (center, width, height, rx, ry, parent, colour) {
+        parent = parent || d3Ref;
+        rx = rx || 0;
+        ry = ry || 0;
+        return parent.draw.rect(center.x() - width / 2, center.y() - height / 2, width, height, rx, ry, parent, colour);
+    };
+
     var decorate = function (d3ref) {
         if (typeof d3ref === 'undefined') {
             throw "undefined d3 ref.";
@@ -202,6 +526,8 @@ var D3Utils = (function (d3_utils) {
         var draw = {};
         draw.centeredRect = centeredRect;
         draw.rect = rect;
+        draw.genericCenteredRect = genericCenteredRect;
+        draw.genericRect = genericRect;
         draw.basicRect = basicRect;
         draw.centeredBasicRect = centeredBasicRect;
         draw.line = line;
@@ -210,12 +536,20 @@ var D3Utils = (function (d3_utils) {
         draw.editableText = editableText;
         draw.centeredText = centeredText;
         draw.textElement = textElement;
+        draw.genericCenteredText = genericCenteredText;
+        draw.genericTextElement = genericTextElement;
         draw.circle = circle;
         draw.circleOnPoint = circleOnPoint;
         draw.group = group;
         draw.svg = svg;
+        draw.propertySVG = propertySVG;
         draw.rectWithTitle = rectWithTitle;
         draw.regroup = regroup;
+        draw.propertyRect = propertyRect;
+        draw.form = form;
+        draw.inputTriangle = inputTriangle;
+        draw.outputTriangle = outputTriangle;
+        draw.dashedLine = dashedLine;
 
         var d3Proto = Object.getPrototypeOf(d3ref);
         d3Proto.draw = draw;

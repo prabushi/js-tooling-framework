@@ -23,7 +23,7 @@ var MainElements = (function (mainElements) {
         id: "Resource",
         title: "Pipe Line",
         icon: "images/tool-icons/lifeline.svg",
-        colour : "#998844",
+        colour : "#ffffff",
         class : "resource",
         dragCursorOffset : { left: 50, top: 50 },
         createCloneCallback : function(view){
@@ -39,6 +39,87 @@ var MainElements = (function (mainElements) {
                 return div.node();
             }
             return cloneCallBack;
+        },
+        parameters: [
+            {
+                key: "title",
+                value: "Resource"
+            },
+            {
+                key: "path",
+                value: ""
+            },
+            {
+                key: "get",
+                value: false
+            },
+            {
+                key: "put",
+                value: false
+            },
+            {
+                key: "post",
+                value: false
+            }
+        ],
+        propertyPaneSchema: [
+            {
+                key: "title",
+                text: "Title"
+            },
+            {
+                key: "path",
+                text: "Path"
+            },
+            {
+                key: "get",
+                checkbox: "GET"
+            },
+            {
+                key: "put",
+                checkbox: "PUT"
+            },
+            {
+                key: "post",
+                checkbox: "POST"
+            }
+        ],
+        textModel : "undefined",
+        utils: {
+            getMyPropertyPaneSchema : function () {
+                return MainElements.lifelines.ResourceLifeline.propertyPaneSchema;
+            },
+            getMyParameters: function (model) {
+                return model.attributes.parameters;
+            },
+            saveMyProperties: function (model, inputs) {
+                model.attributes.title = inputs.title.value;
+                model.attributes.parameters = [
+                    {
+                        key: "title",
+                        value: inputs.title.value
+                    },
+                    {
+                        key: "path",
+                        value: inputs.path.value
+                    },
+                    {
+                        key: "get",
+                        value: inputs.get.checked
+                    },
+                    {
+                        key: "put",
+                        value: inputs.put.checked
+                    },
+                    {
+                        key: "post",
+                        value: inputs.post.checked
+                    }
+                ];
+            },
+            canConnectTo: function () {
+                return ['Worker', 'Source', 'ContainableProcessorElement', 'EndPoint'];
+            }
         }
     };
 

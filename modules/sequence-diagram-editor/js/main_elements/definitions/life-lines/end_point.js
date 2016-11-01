@@ -40,6 +40,61 @@ var MainElements = (function (mainElements) {
                 return div.node();
             }
             return cloneCallBack;
+        },
+        propertyPaneSchema: [
+            {
+                key: "title",
+                text: "Title"
+            },
+            {
+                key: "url",
+                text: "URL"
+            }
+        ],
+        parameters: [
+            {
+                key: "title",
+                value: "End Point"
+            },
+            {
+                key: "url",
+                value: "https://"
+            }
+        ],
+        textModel : "undefined",
+        utils: {
+            getMyPropertyPaneSchema : function () {
+                return MainElements.lifelines.EndPointLifeline.propertyPaneSchema;
+            },
+            getMyParameters: function (model) {
+                return [
+                    {
+                        key: "title",
+                        value: model.attributes.title
+                    },
+                    {
+                        key: "url",
+                        value: model.attributes.parameters[1].value
+                    }
+                ];
+            },
+            saveMyProperties: function (model, inputs) {
+                model.attributes.title = inputs.title.value;
+                model.attributes.parameters = [
+                    {
+                        key: "title",
+                        value: inputs.title.value
+                    },
+                    {
+                        key: "url",
+                        value: inputs.url.value
+                    }
+                ];
+            },
+            canConnectTo: function () {
+                return ['Worker', 'Resource', 'ContainableProcessorElement'];
+            },
+            textModel : "undefined"
         }
     };
 

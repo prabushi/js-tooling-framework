@@ -41,9 +41,36 @@ var Processors = (function (processors) {
             }
             return cloneCallBack;
         },
-        parameters: [],
-        getMySubTree: function (model) {
-            return new TreeNode("SwitchMediator", "SwitchMediator");
+        parameters: [
+            {
+                key: "description",
+                value: "Description"
+            }
+        ],
+        propertyPaneSchema: [
+            {
+                key: "description",
+                text: "Description"
+            }
+        ],
+        utils: {
+            getMyPropertyPaneSchema : function () {
+                return Processors.flowControllers.SwitchMediator.propertyPaneSchema;
+            },
+            getMyParameters: function (model) {
+                return model.attributes.parameters;
+            },
+            saveMyProperties: function (model, inputs) {
+                model.attributes.parameters = [
+                    {
+                        key: "description",
+                        value: inputs.description.value
+                    }
+                ];
+            },
+            getMySubTree: function (model) {
+                return new TreeNode("SwitchMediator", "SwitchMediator");
+            }
         }
     };
 
