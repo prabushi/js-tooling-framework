@@ -30,7 +30,7 @@ lifeLineOptions.rect.roundY = 20;
 lifeLineOptions.rect.class = "lifeline-rect";
 
 // Setting the default service parameters
-serviceProduces = "MediaType.APPLICATION_JSON"
+serviceProduces = "MediaType.APPLICATION_JSON";
 serviceBasePath = "/stock";
 servicePackageName = "com.sample";
 serviceTags = "stock_info,stock_update";
@@ -217,6 +217,24 @@ function initTabs(){
     tabListView.drawInitArrow(currentSource,currentResource,defaultView);
 
 }
+// $('#parse-button').on("click", function () {
+//     console.log("parse 123");
+//     var input = "" +
+//                 "@Path (\"/stock\")" +
+//                 "@Source (interface=\"default\")" +
+//                 "@Service (tags ={\"stock_info\",\"stock_update\"}, description = \"Rest api for get stocks details\", produces = MediaType.APPLICATION_JSON)"
+//                 +
+//                 "package com.sample;" +
+//
+//                 "@Path(\"\")" +
+//                 "resource passthrough(message m) {" +
+//                 "message response;" +
+//                 "log(level = \"Log message\", status = \"m\");" +
+//                 "}"
+//         ;
+//     NELTools = NELTools || require("js/nel/nel");
+//     var x = NELTools.parseScriptTree(input);
+// });
 
 $(document).ready(function(){
     $("#empty-workspace-wrapper").show();

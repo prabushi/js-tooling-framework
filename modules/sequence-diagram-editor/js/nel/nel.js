@@ -18,11 +18,33 @@
 
 var NELTools = (function (nel) {
 
-    var antlr4 = require('lib/antlr4/index');
-    var NELLexer = require('js/nel-gen/NELLexer');
-    var NELParser = require('js/nel-gen/NELParser');
+    var nel = nel || {};
+    // var require = require('lib/require_js/require', function () {
+    //
+    // });
 
-    nel.parseScriptTree = function (input) {
+    // define(function () {
+    //
+    //     var antlr4 = require("lib/antlr4/index");
+    //     var x = require("../antlr4/index");
+    //     var nel = require("../nel-gen/index");
+    // });
+
+    var antlr4 = require(['lib/antlr4/index'], function (foo) {
+        //foo is now loaded.
+    });
+    var NELLexer = require(['js/nel-gen/NELLexer'], function (foo) {
+        //foo is now loaded.
+    });
+    var NELParser = require(['js/nel-gen/NELParser'], function (foo) {
+        //foo is now loaded.require([
+    });
+
+    // var antlr4 = require('lib/antlr4/index');
+    // var NELLexer = require('js/nel-gen/NELLexer');
+    // var NELParser = require('js/nel-gen/NELParser');
+
+    var parseScriptTree = function (input) {
         var chars = new antlr4.InputStream(input);
         var lexer = new NELLexer.NELLexer(chars);
         var tokens = new antlr4.CommonTokenStream(lexer);
@@ -30,7 +52,9 @@ var NELTools = (function (nel) {
         parser.buildParseTrees = true;
         return parser.script();
     };
-
+    
+    nel.parseScriptTree = parseScriptTree;
+    
     return nel;
 
 }(NELTools || {}));

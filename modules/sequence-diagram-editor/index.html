@@ -228,6 +228,7 @@
                 <ul class="" id="serviceAndSourceButtons">
                     <li><a href="#" onclick="loadServiceProperties();">Service</a></li>
                     <li><a href="#" id="sourceId" onclick="toggleSource();">Source</a></li>
+                    <li><a href="#" onclick="generateDesignFromSource();">Parse</a></li>
                 </ul>
             </div>
             <!-- End: breadcrumb row -->
@@ -401,7 +402,6 @@
 <script src="js/dialogs/updatedeletecontroler.js"></script>
 <script src="js/dialogs/updatedeletecontroler-view.js"></script>
 <script src="js/sequence_diagram/sequenced-model.js"></script>
-<script src="js/property-pane/propertypane.js"></script>
 
 <script src="js/main_elements/definitions/life-line.js"></script>
 <script src="js/main_elements/definitions/life-lines/end_point.js"></script>
@@ -430,6 +430,11 @@
 <script src="js/processors/elements/sequenced-model.js"></script>
 <script src="js/processors/elements/ProcessorFactory.js"></script>
 <script src="js/tree.js"></script>
+<!--<script src="js/nel-gen/NELParser.js"></script>-->
+<!--<script src="js/nel-gen/NELLexer.js"></script>-->
+<!--<script src="lib/antlr4/index.js"></script>-->
+<!--<script src="js/nel/nel.js"></script>-->
+<script src="js/nel-parser/generate-design.js"></script>
 <script src="js/app.js"></script>
 
 <script>
@@ -701,7 +706,147 @@
         serviceDescription = $("#description").val();
         $('#servicePropertiesModal').modal('hide');
     }
+
+    function generateDesignFromSource() {
+        var editorMain = document.getElementById("sourceViewTab");
+        var rightContainer = document.getElementById("right-container");
+        editorMain.style.display = "none";
+        rightContainer.style.display = "block";
+        $('#sourceId').html('SOURCE');
+        var source = $('.ace_content').text();
+        //TODO get tree object from the source
+        var obj = {
+            "Resources": [{
+                "get": true,
+                "put": true,
+                "post": true,
+                "path": "/getStocks",
+                "name": "passthrough",
+                "property": {"key": "response", "name": "message"},
+                "invoke": {
+                    "parameters": [{"key": "endpointRef", "value": "stockEP"}, {"key": "messageRef", "value": "m"}]
+                },
+                "respondMediator": {"messageId": "response"}
+            }, {
+                "get": true,
+                "put": true,
+                "post": true,
+                "path": "/getStocks",
+                "name": "passthrough",
+                "property": {"key": "response", "name": "message"},
+                "invoke": {
+                    "parameters": [{"key": "endpointRef", "value": "stockEP"}, {"key": "messageRef", "value": "m"}]
+                },
+                "respondMediator": {"messageId": "response"}
+            }],
+            "Endpoints": [{"uri": "http://localhost:8080/stockquote/all", "name": "stockEP"},
+                {"uri": "http://localhost:8080/stockquote/all", "name": "stockEP"}],
+            "Path": "/stocks",
+            "Source": {"sourceElementValuePairs": {"interface": "default"}},
+            "Service": {
+                "apiElementValuePairs": {
+                    "tags": [{"tagValue": "stock_info"}, {"tagValue": "stock_update"}],
+                    "description": "Rest api for get stocks details",
+                    "producer": {"mediaType": "MediaType.APPLICATION_JSON"}
+                }
+            },
+            "packageDef": "com.sample"
+        };
+
+        var treeObj = {
+            "children": [{
+                "children": [],
+                "value": "InvokeMediator",
+                "type": "InvokeMediator",
+                "configStart": "response = invoke(endpointRef=stockEP, messageRef=m)",
+                "configEnd": ";"
+            }, {
+                "children": [],
+                "value": "ResponseMsg",
+                "type": "ResponseMsg",
+                "configStart": "reply response",
+                "configEnd": ";"
+            }],
+            "value": "Resource",
+            "type": "Resource",
+            "configStart": "resource passthrough (message m) {\nmessage response;",
+            "configEnd": "}",
+            "parameters": [{"key": "title", "value": "passthrough"}, {"key": "path", "value": "/getStocks"},
+                {"key": "get", "value": true}, {"key": "put", "value": true}, {"key": "post", "value": true}]
+        };
+        sourceToDesign(treeObj);
+    }
+
+
 </script>
+<!--<script type="text/javascript">-->
+<!--//    var updateTree = function(tree, ruleNames) {-->
+<!--//        var container = document.getElementById("tree");-->
+<!--//        while (container.hasChildNodes()) {-->
+<!--//            container.removeChild(container.lastChild);-->
+<!--//        }-->
+<!--//-->
+<!--//        for (var i = 0; i < tree.children.length; i++) {-->
+<!--//            var child = tree.children[i];-->
+<!--//            var nodeType = ruleNames[child.ruleIndex];-->
+<!--//            if (nodeType == "element") {-->
+<!--//                var newElement = document.createElement("div");-->
+<!--//                newElement.className = "todoElement";-->
+<!--//                var newElementText = document.createTextNode(child.children[2].getText());-->
+<!--//                newElement.appendChild(newElementText);-->
+<!--//                container.appendChild(newElement);-->
+<!--//            }-->
+<!--//        }-->
+<!--//    };-->
+
+<!--//            define('antlr',function (require, exports, module) {-->
+<!--//                "use strict";-->
+<!--//                var antlr4 = require("lib/antlr4/index");-->
+<!--//            });-->
+<!--//            require(['antlr']);-->
+<!--//           require.config({ paths: { 'antlr4': 'lib/antlr4' }});-->
+<!--//        var antlr4 = require(['antlr4/index'], function() {-->
+<!--//                   // antlr4 = new antlr4();-->
+<!--//                });-->
+<!--//-->
+        <!--var antlr4 = require(['lib/antlr4/index'], function (foo) {-->
+        <!--});-->
+        <!--var TodoLexer = require(['js/nel-gen/NELLexer'], function (foo) {-->
+            <!--//foo is now loaded.-->
+        <!--});-->
+        <!--var TodoParser = require(['js/nel-gen/NELParser'], function (foo) {-->
+            <!--//foo is now loaded.require([-->
+        <!--});-->
+   <!--// var antlr4 = require('lib/antlr4/index');-->
+<!--//    var TodoLexer = require('js/nel-gen/NELLexer');-->
+<!--//    var TodoParser = require('js/nel-gen/NELParser');-->
+
+    <!--document.getElementById("parse-button").addEventListener("click", function () {-->
+        <!--var input = "" +-->
+                    <!--"@Path (\"/stock\")" +-->
+                    <!--"@Source (interface=\"default\")" +-->
+                    <!--"@Service (tags ={\"stock_info\",\"stock_update\"}, description = \"Rest api for get stocks details\", produces = MediaType.APPLICATION_JSON)"-->
+                    <!--+-->
+                    <!--"package com.sample;" +-->
+
+                    <!--"@Path(\"\")" +-->
+                    <!--"resource passthrough(message m) {" +-->
+                    <!--"message response;" +-->
+                    <!--"log(level = \"Log message\", status = \"m\");" +-->
+                    <!--"}"-->
+                <!--;-->
+        <!--var chars = new antlr4.InputStream(input);-->
+        <!--var lexer = new TodoLexer.NELLexer(chars);-->
+        <!--var tokens = new antlr4.CommonTokenStream(lexer);-->
+        <!--var parser = new TodoParser.NELParser(tokens);-->
+        <!--parser.buildParseTrees = true;-->
+        <!--var tree = parser.elements();-->
+        <!--console.log("Parsed: " + tree.children);-->
+       <!--// updateTree(tree, parser.ruleNames);-->
+    <!--});-->
+
+<!--</script>-->
+
 
 </body>
 

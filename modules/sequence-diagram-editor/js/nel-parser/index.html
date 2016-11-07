@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ANTLR on the Web</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="text/javascript" src="lib/required_js/require.js"></script>
+</head>
+<body>
+<div id="inputs">
+<textarea id="code">
+* play with antlr4
+* write a tutorial
+</textarea>
+    <br />
+    <button id="parse">Parse</button>
+</div>
+<script type="text/javascript">
+
+    var updateTree = function (tree, ruleNames) {
+        var container = document.getElementById("tree");
+        while (container.hasChildNodes()) {
+            container.removeChild(container.lastChild);
+        }
+
+        for (var i = 0; i < tree.children.length; i++) {
+            var child = tree.children[i];
+            var nodeType = ruleNames[child.ruleIndex];
+            if (nodeType == "element") {
+                var newElement = document.createElement("div");
+                newElement.className = "todoElement";
+                var newElementText = document.createTextNode(child.children[2].getText());
+                newElement.appendChild(newElementText);
+                container.appendChild(newElement);
+            }
+        }
+    };
+
+    var antlr4 = require('antlr4/index');
+    var NELLexer = require('generated-parser/NELLexer');
+    var NELParser = require('generated-parser/NELParser');
+    var NELListener = require('js/NELListenerImpl');
+
+    document.getElementById("parse").addEventListener("click", function () {
+        var input = "@Path(\"/stocks\")" +
+                    "@Source(interface=\"default\")" +
+                    "@Service(tags = {" +
+                    "\"stock_info\"," +
+                    "\"stock_update\"" +
+                    "}, description = \"Rest api for get stocks details\", produces = MediaType.APPLICATION_JSON)" +
+                    "package com.sample;" +
+                    "constant endpoint stockEP = new EndPoint(\"http://localhost:8080/stockquote/all\");" +
+                    "@GET" +
+                    "@PUT" +
+                    "@POST" +
+                    "@Path(\"/getStocks\")" +
+                    "resource passthrough(message m) {" +
+                    "message response;" +
+                    "response = invoke(endpointRef=stockEP, messageRef=m);" +
+                    "reply response;" +
+                    "}";
+        var chars = new antlr4.InputStream(input);
+        var lexer = new NELLexer.NELLexer(chars);
+        var tokens = new antlr4.CommonTokenStream(lexer);
+        var parser = new NELParser.NELParser(tokens);
+        var listener = new NELListenerImpl();
+        console.log("parser" + parser);
+        parser.buildParseTrees = true;
+        var tree = parser.sourceFile();
+
+        var x = antlr4.tree.ParseTreeWalker.DEFAULT.walk(listener, tree);
+        console.log("Parsed: " + x);
+        //updateTree(tree, parser.ruleNames);
+    });
+</script>
+<div id="tree">
+</div>
+</body>
+</html>
