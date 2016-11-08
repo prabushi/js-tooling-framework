@@ -9,7 +9,7 @@ TestListener.prototype = Object.create(Listener.NELListener.prototype);
 TestListener.prototype.constructor = TestListener;
 
 TestListener.prototype.enterScript = function(ctx) {
-    console.log("DDD ****");
+    console.log("enterScript");
 };
 
 exports.TestListener = TestListener;

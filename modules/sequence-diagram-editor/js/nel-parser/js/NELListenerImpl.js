@@ -527,7 +527,7 @@ NELListenerImpl.prototype.exitQualifiedName = function (ctx) {
 // Enter a parse tree produced by NELParser#resourceDeclaration.
 NELListenerImpl.prototype.enterResourceDeclaration = function (ctx) {
     currentResource.inputParameter = ctx.Identifier().getText();
-    console.log("enterResourceDeclaration: "+ctx.Identifier().getText() + " "+count++);
+    console.log("enterResourceDeclaration: " + ctx.Identifier().getText() + " " + count++);
 };
 
 // Exit a parse tree produced by NELParser#resourceDeclaration.
@@ -771,10 +771,12 @@ NELListenerImpl.prototype.exitLocalVariableAssignmentStatement = function (ctx) 
 
 // Enter a parse tree produced by NELParser#mediatorCallStatement.
 NELListenerImpl.prototype.enterMediatorCallStatement = function (ctx) {
+    console.log("EntermediatorCallStatement" + count++);
 };
 
 // Exit a parse tree produced by NELParser#mediatorCallStatement.
 NELListenerImpl.prototype.exitMediatorCallStatement = function (ctx) {
+    console.log("ExitmediatorCallStatement" + count++);
 };
 
 
@@ -789,54 +791,90 @@ NELListenerImpl.prototype.exitNewTypeObjectCreation = function (ctx) {
 
 // Enter a parse tree produced by NELParser#mediatorCall.
 NELListenerImpl.prototype.enterMediatorCall = function (ctx) {
-    console.log("enterMediatorCall"+count++);
-    var invoke = {
-        parameters: []
-    };
+    console.log("enterMediatorCall" + count++);
     var parameter = {
         key: "",
         value: ""
     };
     //invoke and header mediator
     var mediatorId = ctx.Identifier().getText();
+    console.log("MediatorId: " + mediatorId);
     // call mediator is specified in the language as "invoke". This is a special case.
     if ("invoke" === mediatorId) {
+        var invoke = {
+            parameters: []
+        };
         //invoke mediator
+        // passing all the mediator input arguments
+        var endpointRef = "";
+        var messageRef = "";
+        if (ctx.keyValuePairs() != null) {
+            var keyValuePairs = ctx.keyValuePairs().keyValuePair();
+            keyValuePairs.forEach(function (keyValuePair, index) {
+                var tempParameter = JSON.parse(JSON.stringify(parameter));
+                if (keyValuePair.literal() != null) {
+                    //check for double quotes
+                    tempParameter.value = keyValuePair.literal().getText();
+                } else {
+                    tempParameter.value = keyValuePair.Identifier(keyValuePair.Identifier().length - 1).getText();
+                }
+                // if the key is a classType (eg: 'endpoint' or 'message')
+                if (keyValuePair.classType() != null) {
+                    tempParameter.key = keyValuePair.classType().getText();
+                } else {
+                    tempParameter.key = keyValuePair.Identifier(0).getText();
+                }
+                if (tempParameter.key === "endpointRef") {
+                    endpointRef = tempParameter.value;
+                } else if (tempParameter.key === "messageRef") {
+                    messageRef = tempParameter.value;
+                }
+                invoke.parameters[index] = tempParameter;
+            });
+        }
+        currentResource.invoke = invoke;
+        var invokeNode = new TreeNode("InvokeMediator", "InvokeMediator", ("response = invoke(endpointRef="
+                                                                           + endpointRef
+                                                                           + ", messageRef=" + messageRef
+                                                                           + ")"), ";", [{
+            key: "endpointRef",
+            value: endpointRef
+        }]);
+        rootNode.getChildren().push(invokeNode);
     } else if ("setHeader" === mediatorId) {
         //header mediator
-    }
-    // passing all the mediator input arguments
-    var endpointRef;
-    var messageRef;
-    if (ctx.keyValuePairs() != null) {
-        var keyValuePairs = ctx.keyValuePairs().keyValuePair();
-        keyValuePairs.forEach(function (keyValuePair, index) {
-            var tempParameter = JSON.parse(JSON.stringify(parameter));
-            if (keyValuePair.literal() != null) {
-                //check for double quotes
-                tempParameter.value = keyValuePair.literal().getText();
-            } else {
-                tempParameter.value = keyValuePair.Identifier(keyValuePair.Identifier().length - 1).getText();
-            }
-            // if the key is a classType (eg: 'endpoint' or 'message')
-            if (keyValuePair.classType() != null) {
-                tempParameter.key = keyValuePair.classType().getText();
-            } else {
-                tempParameter.key = keyValuePair.Identifier(0).getText();
-            }
-            if(tempParameter.key === "endpointRef") {
-                endpointRef = tempParameter.value;
-            }else if (tempParameter.key === "messageRef") {
-                messageRef = tempParameter.value;
-            }
-            invoke.parameters[index] = tempParameter;
-        });
+    } else if ("log" === mediatorId) {
+        var log = {parameters: []};
 
+        if (ctx.keyValuePairs() != null) {
+            var keyValuePairs = ctx.keyValuePairs().keyValuePair();
+            keyValuePairs.forEach(function (keyValuePair, index) {
+                var tempParameter = JSON.parse(JSON.stringify(parameter));
+                if (keyValuePair.literal() != null) {
+                    //check for double quotes
+                    tempParameter.value = keyValuePair.literal().getText().replace(/['"]+/g, '');
+                } else {
+                    tempParameter.value =
+                        keyValuePair.Identifier(keyValuePair.Identifier().length - 1).getText().replace(/['"]+/g, '');
+                }
+                // if the key is a classType (eg: 'endpoint' or 'message')
+                if (keyValuePair.classType() != null) {
+                    tempParameter.key = keyValuePair.classType().getText();
+                } else {
+                    tempParameter.key = keyValuePair.Identifier(0).getText();
+                }
+                log.parameters[index] = tempParameter;
+            });
+
+        }
+
+        currentResource.log = log;
+        var log_configStart = "log(level=\"" + log.parameters[1].value + "\"," + "status=\"" + log.parameters[0].value
+                              + "\"";
+        var logNode = new TreeNode("LogMediator", "LogMediator", log_configStart, ");");
+        rootNode.getChildren().push(logNode);
     }
-    currentResource.invoke = invoke;
-    var invokeNode = new TreeNode("InvokeMediator", "InvokeMediator", ("response = invoke(endpointRef=" + endpointRef
-                                                                       + ", messageRef=" + messageRef + ")"), ";");
-    rootNode.getChildren().push(invokeNode);
+
 };
 
 // Exit a parse tree produced by NELParser#mediatorCall.
@@ -1047,26 +1085,5 @@ NELListenerImpl.prototype.enterMessagePropertyName = function (ctx) {
 // Exit a parse tree produced by NELParser#messagePropertyName.
 NELListenerImpl.prototype.exitMessagePropertyName = function (ctx) {
 };
-
-// var dropMediatorFilterAware = function(mediator) {
-//     console.log("filterAware");
-//     if (isInitializationFired) {
-//        // initializerMediator = mediator;
-//     }
-//     // else if (!flowControllerMediatorSection.empty() && !flowControllerStack.empty()) {
-//     //     switch (flowControllerMediatorSection.peek()) {
-//     //         case ifBlock:
-//     //             ((FilterMediator) flowControllerStack.peek()).addThenMediator(mediator);
-//     //             break;
-//     //         case elseBlock:
-//     //             ((FilterMediator) flowControllerStack.peek()).addOtherwiseMediator(mediator);
-//     //             break;
-//     //         case tryBlock:
-//     //             ((TryBlockMediator) flowControllerStack.peek()).addThenMediator(mediator);
-//     //             break;
-//     //         case catchBlock:
-//     //             ((TryBlockMediator)
-// flowControllerStack.peek()).peekExceptionHandlers().addChildMediator(mediator); //             break; //     } // }
-// else { currentResource.property = mediator; } };
 
 exports.NELListenerImpl = NELListenerImpl;

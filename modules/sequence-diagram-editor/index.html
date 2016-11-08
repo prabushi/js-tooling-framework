@@ -6,14 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script src="lib/css-browser-selector_0.4.0/css_browser_selector.js"></script>
-    <link href="lib/bootstrap_v3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-    <link href="lib/font-wso2_1.1.0/css/font-wso2.min.css" rel="stylesheet" type="text/css"/>
-    <link href="lib/theme-wso2_1.0/css/theme-wso2.css" rel="stylesheet" type="text/css"/>
-    <link href="lib/jquery-ui_v1.12.1/jquery-ui.css" rel="stylesheet" type="text/css"/>
-    <link href="lib/js-tree-v3.3.2/themes/default/style.css" rel="stylesheet" type="text/css"/>
-    <link href="lib/nanoscroller_0.8.7/nanoscroller.css" rel="stylesheet" type="text/css"/>
-    <link href="css/layout.css" rel="stylesheet" type="text/css"/>
-    <link href="css/styles.css" rel="stylesheet" type="text/css"/>
+    <link href="lib/bootstrap_v3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="lib/font-wso2_1.1.0/css/font-wso2.min.css" rel="stylesheet" type="text/css" />
+    <link href="lib/theme-wso2_1.0/css/theme-wso2.css" rel="stylesheet" type="text/css" />
+    <link href="lib/jquery-ui_v1.12.1/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="lib/js-tree-v3.3.2/themes/default/style.css" rel="stylesheet" type="text/css" />
+    <link href="lib/nanoscroller_0.8.7/nanoscroller.css" rel="stylesheet" type="text/css" />
+    <link href="css/layout.css" rel="stylesheet" type="text/css" />
+    <link href="css/styles.css" rel="stylesheet" type="text/css" />
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -22,10 +22,10 @@
     <script src="lib/respond_1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <link rel="stylesheet" type="text/css" href="css/sequence_diagram/sequenced-styles.css"/>
-    <link rel="stylesheet" type="text/css" href="css/diagram/diagram-tool-bar.css"/>
-    <link rel="stylesheet" type="text/css" href="css/diagram/preview-pane.css"/>
-    <link rel="stylesheet" type="text/css" href="css/styles.css"/>
+    <link rel="stylesheet" type="text/css" href="css/sequence_diagram/sequenced-styles.css" />
+    <link rel="stylesheet" type="text/css" href="css/diagram/diagram-tool-bar.css" />
+    <link rel="stylesheet" type="text/css" href="css/diagram/preview-pane.css" />
+    <link rel="stylesheet" type="text/css" href="css/styles.css" />
 
     <!-- Start: Templates fro backbone views -->
     <script type="text/template" id="resourceTabsTemplate">
@@ -56,15 +56,16 @@
                 <h4 class="modal-title">Select root folder</h4>
             </div>
             <div class="modal-body">
-                <div class="container-fluid" style="padding: 15px; max-height: 450px; overflow-x: hidden; overflow-y: scroll">
+                <div class="container-fluid"
+                     style="padding: 15px; max-height: 450px; overflow-x: hidden; overflow-y: scroll">
                     <div id="fileTree"></div>
                     <div id="file-browser-error" class="alert alert-danger" style="display: none;">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default"  onclick="onFileBrowserClose();">Cancel</button>
-                <button type="button" class="btn btn-primary"  onclick="onFileSelected();">Select</button>
+                <button type="button" class="btn btn-default" onclick="onFileBrowserClose();">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="onFileSelected();">Select</button>
             </div>
         </div>
     </div>
@@ -87,10 +88,13 @@
                         <div class="form-group">
                             <label for="location" class="control-label col-sm-2">Location</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="location" placeholder="eg: /home/user/wso2-integration-server/ballerina-configs">
+                                <input type="text" class="form-control" id="location"
+                                       placeholder="eg: /home/user/wso2-integration-server/ballerina-configs">
                             </div>
                             <div class="col-sm-2" style="float: right">
-                                <button type="button" class="btn btn-primary" onclick="openFileBrowser();">Select Folder</button>
+                                <button type="button" class="btn btn-primary" onclick="openFileBrowser();">Select
+                                                                                                           Folder
+                                </button>
                             </div>
                         </div>
                         <div class="form-group">
@@ -122,7 +126,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Set Service Parameters</h4>
             </div>
             <div class="modal-body">
@@ -130,7 +135,8 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="basePath">Base Path</label>
                         <div class="col-md-8">
-                            <input id="basePath" name="basePath" type="text" placeholder="/basepath" class="form-control input-md">
+                            <input id="basePath" name="basePath" type="text" placeholder="/basepath"
+                                   class="form-control input-md">
 
                         </div>
                     </div>
@@ -138,7 +144,8 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="produces">Produces</label>
                         <div class="col-md-8">
-                            <input id="produces" name="produces" type="text" placeholder="MediaType.APPLICATION_JSON" class="form-control input-md">
+                            <input id="produces" name="produces" type="text" placeholder="MediaType.APPLICATION_JSON"
+                                   class="form-control input-md">
                         </div>
                     </div>
 
@@ -146,7 +153,8 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="packageName">Package Name</label>
                         <div class="col-md-8">
-                            <input id="packageName" name="packageName" type="text" placeholder="com.sample" class="form-control input-md">
+                            <input id="packageName" name="packageName" type="text" placeholder="com.sample"
+                                   class="form-control input-md">
                         </div>
                     </div>
 
@@ -154,7 +162,8 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="description">Description</label>
                         <div class="col-md-8">
-                            <input id="description" name="description" type="text" placeholder="Your Description Here" class="form-control input-md">
+                            <input id="description" name="description" type="text" placeholder="Your Description Here"
+                                   class="form-control input-md">
                         </div>
                     </div>
 
@@ -162,7 +171,8 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="tags">Tags</label>
                         <div class="col-md-8">
-                            <input id="tags" name="tags" type="text" placeholder="tag1,tag2" class="form-control input-md">
+                            <input id="tags" name="tags" type="text" placeholder="tag1,tag2"
+                                   class="form-control input-md">
                         </div>
                     </div>
                 </form>
@@ -199,7 +209,7 @@
                     <li><a href="#" data-toggle="modal" data-target="#newConfigModal">New<span
                             class="sr-only">(current)</span></a></li>
                     <li><a href="#" onclick="saveConfiguration();">Save</a></li>
-                    <li><a href="#"  onclick="toggleSource();">Source</a></li>
+                    <li><a href="#" onclick="toggleSource();">Source</a></li>
                 </ul>
             </div>
         </div>
@@ -216,32 +226,32 @@
         <div id="page-content-first-row" class="row">
             <div id="alertArea" class="alert">
             </div>
-            <div class="row" id="breadcrumbRow" ><!-- TODO make this visible -->
+            <div class="row" id="breadcrumbRow"><!-- TODO make this visible -->
                 <ol class="breadcrumb" id="breadcrumbList">
                 </ol>
                 <ul class="" id="saveAndNewButtons">
-                    <li><a href="#" onclick="onNewClick();" >New</a></li>
+                    <li><a href="#" onclick="onNewClick();">New</a></li>
                     <li><a href="#" onclick="saveConfiguration();">Save</a></li>
                 </ul>
             </div>
-            <div class="row" id="serviceAndSourceButtonsRow" >
+            <div class="row" id="serviceAndSourceButtonsRow">
                 <ul class="" id="serviceAndSourceButtons">
                     <li><a href="#" onclick="loadServiceProperties();">Service</a></li>
                     <li><a href="#" id="sourceId" onclick="toggleSource();">Source</a></li>
-                    <li><a href="#" onclick="generateDesignFromSource();">Parse</a></li>
+                    <li><a href="#" onclick="generateDesignFromSource();">Generate Design</a></li>
                 </ul>
             </div>
             <!-- End: breadcrumb row -->
             <!-- Start: file explorer and editor area row -->
             <div class="row">
                 <!-- Ace editor view start-->
-                <div id="sourceViewTab"  style="display:none" class="col-sm-2">
+                <div id="sourceViewTab" style="display:none" class="col-sm-2">
                     <div id="ace-editor"></div>
                 </div>
                 <!--Ace editor view end-->
                 <!-- Start: left container -->
-                <div id="left-container" class="col-sm-2" style="display: none" ><!-- TODO make this visible -->
-                    <!-- Start: file explorer -->
+                <div id="left-container" class="col-sm-2" style="display: none"><!-- TODO make this visible -->
+                                                                                <!-- Start: file explorer -->
                     <div id="tree-container">
                         <div id="tree-action-bar">
                             <i id="tree-delete" class="icon fw fw-delete fw-lg tree-action"></i>
@@ -259,14 +269,15 @@
                         </span>
                         </div>
                         <div>
-                            <ul id="tree"  class="tree-view tree-view-lines"> </ul>
+                            <ul id="tree" class="tree-view tree-view-lines"></ul>
                         </div>
                     </div>
-                    <!-- End: file explorer -->
+                                                                                <!-- End: file explorer -->
                 </div>
                 <!-- End: left container -->
                 <!-- Start: right container -->
-                <div id="right-container" class="col-sm-12"><!-- TODO resize to col-sm-10 once left container made visible -->
+                <div id="right-container" class="col-sm-12">
+                    <!-- TODO resize to col-sm-10 once left container made visible -->
                     <div class="container-fluid" id="empty-workspace-wrapper">
                         <div class="col-sm-5"></div>
                         <div class="col-sm-2" id="start-actions-container">
@@ -274,7 +285,7 @@
                             <hr>
                             <ul>
                                 <li>Create a <a onclick="onNewClick()">new</a> Ballerina Config</li>
-                                <li class="disabled"><a>Open</a>  an existing Ballerina Config</li>
+                                <li class="disabled"><a>Open</a> an existing Ballerina Config</li>
                                 <li class="disabled">import from CVS</li>
                             </ul>
                         </div>
@@ -295,14 +306,15 @@
                             <div id="tool-palette" class="col-sm-2"></div>
                             <!-- End: tool-palette -->
                             <!-- Start: Editor Container -->
-                            <div id="editor-container"  class="col-sm-8">
+                            <div id="editor-container" class="col-sm-8">
                                 <!-- warning validation for number of endpoints on canvas"-->
                                 <div id="endpointModal" class="modal fade" role="dialog">
                                     <div class="modal-dialog">
                                         <!-- Modal content-->
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <button type="button" class="close"
+                                                        data-dismiss="modal">&times;</button>
                                                 <h4 class="modal-title" style="color:lightgoldenrodyellow">Warning!</h4>
                                             </div>
                                             <div class="modal-body">
@@ -359,7 +371,9 @@
 <script type="text/javascript">
 
     var require = {
-        baseUrl: window.location.protocol + "//" + window.location.host + window.location.pathname.split("/").slice(0, -1).join("/"),
+        baseUrl: window.location.protocol + "//" + window.location.host + window.location.pathname.split("/").slice(0,
+                                                                                                                    -1).join(
+                "/"),
         paths: {
             ace: "lib/ace",
             beautify: "lib/beautify"
@@ -440,11 +454,11 @@
 <script>
     var formatter;
     define('formatter', ['beautify/beautify'],
-            function(beautify) {
-                var beautify = beautify.js_beautify;
-                formatter = beautify;
+           function (beautify) {
+               var beautify = beautify.js_beautify;
+               formatter = beautify;
 
-            }
+           }
     );
     require(['formatter']);
 
@@ -452,67 +466,67 @@
 
 <script>
     var mainEditor;
-    define('testace', ['ace/ace','ace/ext/language_tools'],
-            function(ace,langTools) {
-                console.log("source view lookup");
-                var editor = ace.edit("ace-editor");
-                mainEditor = editor;
-                //Avoiding ace warning
-                mainEditor.$blockScrolling = Infinity;
-                mainEditor.setTheme("ace/theme/twilight");
-                mainEditor.session.setMode("ace/mode/nel");
-                var langTools = ace.require("ace/ext/language_tools");
-                mainEditor.setOptions({
-                    enableBasicAutocompletion:true
+    define('testace', ['ace/ace', 'ace/ext/language_tools'],
+           function (ace, langTools) {
+               console.log("source view lookup");
+               var editor = ace.edit("ace-editor");
+               mainEditor = editor;
+               //Avoiding ace warning
+               mainEditor.$blockScrolling = Infinity;
+               mainEditor.setTheme("ace/theme/twilight");
+               mainEditor.session.setMode("ace/mode/nel");
+               var langTools = ace.require("ace/ext/language_tools");
+               mainEditor.setOptions({
+                                         enableBasicAutocompletion: true
 
 
-                });
-                mainEditor.setBehavioursEnabled(true);
-                //bind auto complete to key press
-                mainEditor.commands.on("afterExec", function(e){
-                    if (e.command.name == "insertstring"&&/^[\w.]$/.test(e.args)) {
-                        mainEditor.execCommand("startAutocomplete");
-                    }
-                });
+                                     });
+               mainEditor.setBehavioursEnabled(true);
+               //bind auto complete to key press
+               mainEditor.commands.on("afterExec", function (e) {
+                   if (e.command.name == "insertstring" && /^[\w.]$/.test(e.args)) {
+                       mainEditor.execCommand("startAutocomplete");
+                   }
+               });
 
-            }
+           }
     );
     require(['testace']);
 
 </script>
 <script>
     var configLocation,
-        configFileName,
-        saveServiceURL = workspaceServiceURL + "/write",
-        newWizardError = $('#newWizardError'),
-        alertArea = $('#alertArea');
+            configFileName,
+            saveServiceURL = workspaceServiceURL + "/write",
+            newWizardError = $('#newWizardError'),
+            alertArea = $('#alertArea');
 
     newWizardError.hide();
     alertArea.hide();
 
     var fileBrowser;
 
-    function openFileBrowser(){
+    function openFileBrowser() {
         $('#fileBrowserModel').modal('show');
         $('#newConfigModal').modal('hide');
-        fileBrowser = new Tools.Views.FileBrowser({container:"#fileTree"});
+        fileBrowser = new Tools.Views.FileBrowser({container: "#fileTree"});
     }
 
-    function onFileBrowserClose(){
+    function onFileBrowserClose() {
         $('#fileBrowserModel').modal('hide');
         $('#newConfigModal').modal('show');
     }
 
-    function onFileSelected(){
+    function onFileSelected() {
         var selected = fileBrowser.selected;
-        if(selected){
+        if (selected) {
             $('#fileBrowserModel').modal('hide');
             $('#newConfigModal').modal('show');
             $('#location').val(selected);
         }
     }
 
-    function alertSuccess(msg){
+    function alertSuccess(msg) {
         alertArea.text(msg);
         alertArea.removeClass("alert-danger");
         alertArea.addClass("alert-success");
@@ -521,7 +535,7 @@
         });
     }
 
-    function alertError(msg){
+    function alertError(msg) {
         alertArea.text(msg);
         alertArea.addClass("alert-danger");
         alertArea.removeClass("alert-success");
@@ -530,26 +544,26 @@
         });
     }
 
-    function setBreadcrumb(path, file){
+    function setBreadcrumb(path, file) {
         path = _.replace(path, /\\/gi, "/")
         var pathArr = _.split(path, "/");
 
         var breadCumbList = $("#breadcrumbList");
         breadCumbList.empty();
-        pathArr.forEach(function(segment){
-            if(!_.isEmpty(segment)){
-                var li = $("<li>"+segment+"</li>");
+        pathArr.forEach(function (segment) {
+            if (!_.isEmpty(segment)) {
+                var li = $("<li>" + segment + "</li>");
                 li.addClass("breadcrumb-item");
                 breadCumbList.append(li);
             }
         });
-        var fileLi = $("<li>"+file+"</li>");
+        var fileLi = $("<li>" + file + "</li>");
         fileLi.addClass("breadcrumb-item");
         fileLi.addClass("active");
         breadCumbList.append(fileLi);
     }
 
-    function onNewClick(){
+    function onNewClick() {
         newWizardError.hide();
         $('#newConfigModal').modal('show');
     }
@@ -562,79 +576,84 @@
         });
         tagString += '}';
         var config = '@Path ("' + serviceBasePath + '")\n' +
-                '@Source (interface="default")\n' +
-                '@Service (tags =' + tagString + ', description = "' + serviceDescription + '", produces = ' + serviceProduces + ')\n' +
-                'package ' + servicePackageName + ';\n\n';
+                     '@Source (interface="default")\n' +
+                     '@Service (tags =' + tagString + ', description = "' + serviceDescription + '", produces = '
+                     + serviceProduces + ')\n' +
+                     'package ' + servicePackageName + ';\n\n';
         config += diagram.parseTree();
-        var payload = "location=" + (btoa(configLocation.value + "/" + configFileName.value)) + "&config=" + (btoa(config));
+        var payload = "location=" + (btoa(configLocation.value + "/" + configFileName.value)) + "&config=" + (btoa(
+                        config));
 
         $.ajax({
-            url: saveServiceURL,
-            type: "POST",
-            data: payload,
-            contentType: "text/plain; charset=utf-8",
-            async: false,
-            success: function (data, textStatus, xhr) {
-                if (xhr.status == 200) {
-                   alertSuccess("Configuration was saved successfully.");
-                } else {
-                    alertError("Something went wrong. " + textStatus);
-                }
-            },
-            error: function(res, errorCode, error){
-                alertError("Something went wrong. " + errorCode + " " + error + " " + res.responseText);
-            }
-        });
+                   url: saveServiceURL,
+                   type: "POST",
+                   data: payload,
+                   contentType: "text/plain; charset=utf-8",
+                   async: false,
+                   success: function (data, textStatus, xhr) {
+                       if (xhr.status == 200) {
+                           alertSuccess("Configuration was saved successfully.");
+                       } else {
+                           alertError("Something went wrong. " + textStatus);
+                       }
+                   },
+                   error: function (res, errorCode, error) {
+                       alertError("Something went wrong. " + errorCode + " " + error + " " + res.responseText);
+                   }
+               });
     }
 
     function newConfiguration() {
         configLocation = document.getElementById("location");
         configFileName = document.getElementById("configName");
-        if(_.isEmpty(configLocation.value)){
-            newWizardError.text("Invalid Value for Location." );
+        if (_.isEmpty(configLocation.value)) {
+            newWizardError.text("Invalid Value for Location.");
             newWizardError.show();
             return;
         }
-        if(_.isEmpty(configFileName.value)){
-            newWizardError.text("Invalid Value for File Name." );
+        if (_.isEmpty(configFileName.value)) {
+            newWizardError.text("Invalid Value for File Name.");
             newWizardError.show();
             return;
         }
 
 
         var config = '@Path ("/stock")\n' +
-                '@Source (interface="default")\n' +
-                '@Service (tags = {"stock_info","stock_update"}, description = "Rest api for do operations on admin", produces = MediaType.APPLICATION_JSON)\n' +
-                'package com.sample;\n\n';
+                     '@Source (interface="default")\n' +
+                     '@Service (tags = {"stock_info","stock_update"}, description = "Rest api for do operations on admin", produces = MediaType.APPLICATION_JSON)\n'
+                     +
+                     'package com.sample;\n\n';
 
-        var payload = "location=" + (btoa(configLocation.value + "/" + configFileName.value)) + "&config=" + (btoa(config));
+        var payload = "location=" + (btoa(configLocation.value + "/" + configFileName.value)) + "&config=" + (btoa(
+                        config));
 
         $.ajax({
-            url: saveServiceURL,
-            type: "POST",
-            data: payload,
-            contentType: "text/plain; charset=utf-8",
-            async: false,
-            success: function (data, textStatus, xhr) {
-                if (xhr.status == 200) {
-                    alertSuccess("File " + configLocation.value + "/" + configFileName.value  + " created successfully.");
-                    $('#newConfigModal').modal('hide');
-                    $("#breadcrumbRow").show();
-                    setBreadcrumb(configLocation.value, configFileName.value);
-                    $("#empty-workspace-wrapper").hide();
-                    $("#resource-tabs-wrapper").show();
-                    $("#serviceAndSourceButtonsRow").show();
-                    initTabs();
-                } else {
-                    newWizardError.text("Something went wrong. " + textStatus);
-                    newWizardError.show();
-                }
-            },
-            error: function(res, errorCode, error){
-                newWizardError.text("Something went wrong. " + errorCode + " " + error + " " + res.responseText);
-                newWizardError.show();
-            }
-        });
+                   url: saveServiceURL,
+                   type: "POST",
+                   data: payload,
+                   contentType: "text/plain; charset=utf-8",
+                   async: false,
+                   success: function (data, textStatus, xhr) {
+                       if (xhr.status == 200) {
+                           alertSuccess("File " + configLocation.value + "/" + configFileName.value
+                                        + " created successfully.");
+                           $('#newConfigModal').modal('hide');
+                           $("#breadcrumbRow").show();
+                           setBreadcrumb(configLocation.value, configFileName.value);
+                           $("#empty-workspace-wrapper").hide();
+                           $("#resource-tabs-wrapper").show();
+                           $("#serviceAndSourceButtonsRow").show();
+                           initTabs();
+                       } else {
+                           newWizardError.text("Something went wrong. " + textStatus);
+                           newWizardError.show();
+                       }
+                   },
+                   error: function (res, errorCode, error) {
+                       newWizardError.text("Something went wrong. " + errorCode + " " + error + " " + res.responseText);
+                       newWizardError.show();
+                   }
+               });
 
     }
     function toggleSource() {
@@ -653,9 +672,10 @@
         tagString = tagString.substring(0, tagString.length - 1);
         tagString += '}';
         var sourceConfig = '@Path ("' + serviceBasePath + '")\n' +
-                '@Source (interface="default")\n' +
-                '@Service (tags =' + tagString + ', description = "' + serviceDescription + '", produces = ' + serviceProduces + ')\n' +
-                'package ' + servicePackageName + ';\n\n';
+                           '@Source (interface="default")\n' +
+                           '@Service (tags =' + tagString + ', description = "' + serviceDescription + '", produces = '
+                           + serviceProduces + ')\n' +
+                           'package ' + servicePackageName + ';\n\n';
 
         //Source not loaded yet
         if (editorMain.style.display == "none") {
@@ -685,7 +705,7 @@
         }
     }
 
-    function onSourceClick(){
+    function onSourceClick() {
         toggleSource();
     }
 
@@ -713,7 +733,7 @@
         editorMain.style.display = "none";
         rightContainer.style.display = "block";
         $('#sourceId').html('SOURCE');
-        var source = $('.ace_content').text();
+        var source = $('.ace_content').text();//source from the editor
         //TODO get tree object from the source
         var obj = {
             "Resources": [{
@@ -721,17 +741,7 @@
                 "put": true,
                 "post": true,
                 "path": "/getStocks",
-                "name": "passthrough",
-                "property": {"key": "response", "name": "message"},
-                "invoke": {
-                    "parameters": [{"key": "endpointRef", "value": "stockEP"}, {"key": "messageRef", "value": "m"}]
-                },
-                "respondMediator": {"messageId": "response"}
-            }, {
-                "get": true,
-                "put": true,
-                "post": true,
-                "path": "/getStocks",
+                "inputParameter": "m",
                 "name": "passthrough",
                 "property": {"key": "response", "name": "message"},
                 "invoke": {
@@ -739,8 +749,7 @@
                 },
                 "respondMediator": {"messageId": "response"}
             }],
-            "Endpoints": [{"uri": "http://localhost:8080/stockquote/all", "name": "stockEP"},
-                {"uri": "http://localhost:8080/stockquote/all", "name": "stockEP"}],
+            "Endpoints": [{"uri": "http://localhost:8080/stockquote/all", "name": "stockEP"}],
             "Path": "/stocks",
             "Source": {"sourceElementValuePairs": {"interface": "default"}},
             "Service": {
@@ -753,13 +762,15 @@
             "packageDef": "com.sample"
         };
 
+        //simple pass through
         var treeObj = {
             "children": [{
                 "children": [],
                 "value": "InvokeMediator",
                 "type": "InvokeMediator",
                 "configStart": "response = invoke(endpointRef=stockEP, messageRef=m)",
-                "configEnd": ";"
+                "configEnd": ";",
+                "parameters": [{"key": "endpointRef", "value": "stockEP"}]
             }, {
                 "children": [],
                 "value": "ResponseMsg",
@@ -774,79 +785,40 @@
             "parameters": [{"key": "title", "value": "passthrough"}, {"key": "path", "value": "/getStocks"},
                 {"key": "get", "value": true}, {"key": "put", "value": true}, {"key": "post", "value": true}]
         };
+
+        //passthrough with a logger
+//        var treeObj = {"children": [{
+//            "children": [],
+//            "value": "LogMediator",
+//            "type": "LogMediator",
+//            "configStart": "log(level=\"Message Received...\",status=\"custom\"",
+//            "configEnd": ");"
+//        }, {
+//            "children": [],
+//            "value": "InvokeMediator",
+//            "type": "InvokeMediator",
+//            "configStart": "response = invoke(endpointRef=stockEP, messageRef=m)",
+//            "configEnd": ";",
+//            "parameters": [{"key": "endpointRef", "value": "stockEP"}]
+//        }, {
+//            "children": [],
+//            "value": "ResponseMsg",
+//            "type": "ResponseMsg",
+//            "configStart": "reply response",
+//            "configEnd": ";"
+//        }],
+//            "value": "Resource",
+//            "type": "Resource",
+//            "configStart": "resource passthrough (message m) {\nmessage response;",
+//            "configEnd": "}",
+//            "parameters": [{"key": "title", "value": "passthrough"}, {"key": "path", "value": "/getStocks"},
+//                {"key": "get", "value": true}, {"key": "put", "value": true}, {"key": "post", "value": true}]
+//        };
         sourceToDesign(treeObj);
     }
 
 
 </script>
-<!--<script type="text/javascript">-->
-<!--//    var updateTree = function(tree, ruleNames) {-->
-<!--//        var container = document.getElementById("tree");-->
-<!--//        while (container.hasChildNodes()) {-->
-<!--//            container.removeChild(container.lastChild);-->
-<!--//        }-->
-<!--//-->
-<!--//        for (var i = 0; i < tree.children.length; i++) {-->
-<!--//            var child = tree.children[i];-->
-<!--//            var nodeType = ruleNames[child.ruleIndex];-->
-<!--//            if (nodeType == "element") {-->
-<!--//                var newElement = document.createElement("div");-->
-<!--//                newElement.className = "todoElement";-->
-<!--//                var newElementText = document.createTextNode(child.children[2].getText());-->
-<!--//                newElement.appendChild(newElementText);-->
-<!--//                container.appendChild(newElement);-->
-<!--//            }-->
-<!--//        }-->
-<!--//    };-->
-
-<!--//            define('antlr',function (require, exports, module) {-->
-<!--//                "use strict";-->
-<!--//                var antlr4 = require("lib/antlr4/index");-->
-<!--//            });-->
-<!--//            require(['antlr']);-->
-<!--//           require.config({ paths: { 'antlr4': 'lib/antlr4' }});-->
-<!--//        var antlr4 = require(['antlr4/index'], function() {-->
-<!--//                   // antlr4 = new antlr4();-->
-<!--//                });-->
-<!--//-->
-        <!--var antlr4 = require(['lib/antlr4/index'], function (foo) {-->
-        <!--});-->
-        <!--var TodoLexer = require(['js/nel-gen/NELLexer'], function (foo) {-->
-            <!--//foo is now loaded.-->
-        <!--});-->
-        <!--var TodoParser = require(['js/nel-gen/NELParser'], function (foo) {-->
-            <!--//foo is now loaded.require([-->
-        <!--});-->
-   <!--// var antlr4 = require('lib/antlr4/index');-->
-<!--//    var TodoLexer = require('js/nel-gen/NELLexer');-->
-<!--//    var TodoParser = require('js/nel-gen/NELParser');-->
-
-    <!--document.getElementById("parse-button").addEventListener("click", function () {-->
-        <!--var input = "" +-->
-                    <!--"@Path (\"/stock\")" +-->
-                    <!--"@Source (interface=\"default\")" +-->
-                    <!--"@Service (tags ={\"stock_info\",\"stock_update\"}, description = \"Rest api for get stocks details\", produces = MediaType.APPLICATION_JSON)"-->
-                    <!--+-->
-                    <!--"package com.sample;" +-->
-
-                    <!--"@Path(\"\")" +-->
-                    <!--"resource passthrough(message m) {" +-->
-                    <!--"message response;" +-->
-                    <!--"log(level = \"Log message\", status = \"m\");" +-->
-                    <!--"}"-->
-                <!--;-->
-        <!--var chars = new antlr4.InputStream(input);-->
-        <!--var lexer = new TodoLexer.NELLexer(chars);-->
-        <!--var tokens = new antlr4.CommonTokenStream(lexer);-->
-        <!--var parser = new TodoParser.NELParser(tokens);-->
-        <!--parser.buildParseTrees = true;-->
-        <!--var tree = parser.elements();-->
-        <!--console.log("Parsed: " + tree.children);-->
-       <!--// updateTree(tree, parser.ruleNames);-->
-    <!--});-->
-
-<!--</script>-->
-
 
 </body>
 

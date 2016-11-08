@@ -91,7 +91,8 @@ var Diagrams = (function (diagrams) {
             initialize: function (attrs, options) {
                 DiagramElement.prototype.initialize.call(this, attrs, options);
                 this.source(attrs['source']['activation'], attrs['source']['x'], attrs['source']['y']);
-                this.destination(attrs['destination']['activation'], attrs['destination']['x'], attrs['destination']['y']);
+                this.destination(attrs['destination']['activation'], attrs['destination']['x'],
+                                 attrs['destination']['y']);
             },
 
             modelName: "Link",
@@ -262,60 +263,60 @@ var Diagrams = (function (diagrams) {
 
 // Model for Tab based resources
     var Tab = Backbone.Model.extend({
-        modelName: "Tab",
-        nameSpace: diagrams,
+                                        modelName: "Tab",
+                                        nameSpace: diagrams,
 
 
-        initialize: function (attrs, options) {
-            //store diagram object of a given tab
-            var diagramSet = new DiagramsList([]);
-            this.diagramForTab(diagramSet);
-            this.viewObj = {};
+                                        initialize: function (attrs, options) {
+                                            //store diagram object of a given tab
+                                            var diagramSet = new DiagramsList([]);
+                                            this.diagramForTab(diagramSet);
+                                            this.viewObj = {};
 
-        },
-        // mark already visited tabs
-        setSelectedTab: function () {
-            this.attributes.createdTab = true;
-        },
-        getSelectedTab: function () {
-            return this.createdTab;
-        },
-        setDiagramViewForTab: function (view) {
-            this.viewObj = view;
-        },
+                                        },
+                                        // mark already visited tabs
+                                        setSelectedTab: function () {
+                                            this.attributes.createdTab = true;
+                                        },
+                                        getSelectedTab: function () {
+                                            return this.createdTab;
+                                        },
+                                        setDiagramViewForTab: function (view) {
+                                            this.viewObj = view;
+                                        },
 
-        // diagram collection getters/setters
-        diagramForTab: function (element) {
-            if (_.isUndefined(element)) {
-                return this.get('diagramForTab');
-            } else {
-                this.set('diagramForTab', element);
-            }
-        },
-        // on new tab creation add the diagram object to list
-        addDiagramForTab: function (element) {
+                                        // diagram collection getters/setters
+                                        diagramForTab: function (element) {
+                                            if (_.isUndefined(element)) {
+                                                return this.get('diagramForTab');
+                                            } else {
+                                                this.set('diagramForTab', element);
+                                            }
+                                        },
+                                        // on new tab creation add the diagram object to list
+                                        addDiagramForTab: function (element) {
 
-            this.diagramForTab().add(element);
-        },
-        //get the diagram object from the collection
-        getDiagramOfTab: function (id) {
-            return this.diagramForTab().get(id);
-        },
+                                            this.diagramForTab().add(element);
+                                        },
+                                        //get the diagram object from the collection
+                                        getDiagramOfTab: function (id) {
+                                            return this.diagramForTab().get(id);
+                                        },
 
-        preview: function(preview){
-            if(_.isUndefined(preview)){
-                return this.get("preview");
-            }
-            this.set("preview", preview);
-        },
+                                        preview: function (preview) {
+                                            if (_.isUndefined(preview)) {
+                                                return this.get("preview");
+                                            }
+                                            this.set("preview", preview);
+                                        },
 
-        defaults: {
-            resourceId: "id-not-set",
-            resourceTitle: "",
-            hrefId: "id-not-set",
-            createdTab: false,
-        }
-    });
+                                        defaults: {
+                                            resourceId: "id-not-set",
+                                            resourceTitle: "",
+                                            hrefId: "id-not-set",
+                                            createdTab: false,
+                                        }
+                                    });
     var Diagram = Backbone.Model.extend(
         /** @lends Diagram.prototype */
         {
@@ -425,7 +426,7 @@ var Diagrams = (function (diagrams) {
                 //this.trigger("addElement", element, opts);
 
                 if (element instanceof SequenceD.Models.LifeLine) {
-                    if(element.attributes.title.startsWith("Resource")) {
+                    if (element.attributes.title.startsWith("Resource")) {
                         this.diagramResourceElements().add(element, opts);
                     } else if (element.attributes.title.startsWith("Source")) {
                         this.diagramSourceElements().add(element, opts);
@@ -435,7 +436,7 @@ var Diagrams = (function (diagrams) {
                         this.diagramEndpointElements().add(element, opts);
                     }
                     this.lifeLineMap[element.attributes.centerPoint.attributes.x] = element;
-                } else{
+                } else {
                     this.trigger("addElement", element, opts);
                 }
             },
@@ -490,7 +491,6 @@ var Diagrams = (function (diagrams) {
             },
 
 
-
             clickedLifeLine: undefined,
 
             positionTemp: undefined,
@@ -525,12 +525,13 @@ var Diagrams = (function (diagrams) {
                 return this.lifeLineMap[nearestKey];
             },
 
-            parseTree: function() {
+            parseTree: function () {
 
                 var TreeRoot;
 
                 var buildTree = function (resourceModel) {
-                    // Until the message variabe concept introduce to the tooling we will be creating a message called response on behalf of the user
+                    // Until the message variabe concept introduce to the tooling we will be creating a message called
+                    // response on behalf of the user
                     var rootNode = new TreeNode("Resource", "Resource", "resource passthrough (message m) {\nmessage response;", "}");
                     for (var itr = 0; itr < (resourceModel.get('children').models).length; itr++) {
                         var mediator = (resourceModel.get('children').models)[itr];
@@ -542,14 +543,19 @@ var Diagrams = (function (diagrams) {
                             if (mediator.get('message').get('destination').get('parent').get('title') === "Source") {
                                 var node = new TreeNode("ResponseMsg", "ResponseMsg", "reply response", ";");
                                 rootNode.getChildren().push(node);
-                            }else if(mediator.get('message').get('destination').get('parent').get('cssClass') === "endpoint"){
+                            } else if (mediator.get('message').get('destination').get('parent').get('cssClass')
+                                       === "endpoint") {
                                 //This section will handle "invoke" mediator transformation.
-                                endpoint = mediator.get('message').get('destination').get('parent').attributes.parameters[0].value;
-                                uri = mediator.get('message').get('destination').get('parent').attributes.parameters[1].value;
+                                endpoint = mediator.get('message').get('destination').get(
+                                    'parent').attributes.parameters[0].value;
+                                uri = mediator.get('message').get('destination').get(
+                                    'parent').attributes.parameters[1].value;
                                 // When we define the properties, need to extract the endpoint from the property
                                 definedConstants["HTTPEP"] = {name: endpoint, value: uri};
 
-                                var invokeNode = new TreeNode("InvokeMediator", "InvokeMediator", ("response = invoke(endpointKey=" + endpoint + ", messageKey=m)"), ";");
+                                var invokeNode = new TreeNode("InvokeMediator", "InvokeMediator", ("response = invoke(endpointKey="
+                                                                                                   + endpoint
+                                                                                                   + ", messageKey=m)"), ";");
                                 rootNode.getChildren().push(invokeNode);
                             }
                         } else {
@@ -567,7 +573,8 @@ var Diagrams = (function (diagrams) {
                     // Defining the global constants
                     for (var key in definedConstants) {
                         if (_.isEqual(key, "HTTPEP")) {
-                            finalSource += "constant endpoint " + definedConstants[key].name + " = new HTTPEndPoint(\"" +
+                            finalSource +=
+                                "constant endpoint " + definedConstants[key].name + " = new HTTPEndPoint(\"" +
                                 definedConstants[key].value + "\");\n";
                         }
                     }
@@ -575,10 +582,10 @@ var Diagrams = (function (diagrams) {
                     // For the moment we are injecting the API methods directly hardcoded here at the moment.
                     // After the properties view implementation those can be dynamically changed
                     finalSource += "\n" +
-                        ((resourceModel.attributes.parameters[2].value==true) ? '@GET\n' : '') +
-                        ((resourceModel.attributes.parameters[3].value==true) ? '@PUT\n' : '') +
-                        ((resourceModel.attributes.parameters[4].value==true) ? '@POST\n' : '') +
-                        '@Path ("' + resourceModel.attributes.parameters[1].value +'")\n'
+                                   ((resourceModel.attributes.parameters[2].value == true) ? '@GET\n' : '') +
+                                   ((resourceModel.attributes.parameters[3].value == true) ? '@PUT\n' : '') +
+                                   ((resourceModel.attributes.parameters[4].value == true) ? '@POST\n' : '') +
+                                   '@Path ("' + resourceModel.attributes.parameters[1].value + '")\n'
                 };
 
                 var traverse = function (tree, finalSource) {
@@ -599,19 +606,6 @@ var Diagrams = (function (diagrams) {
                 TreeRoot = buildTree(defaultView.model.get('diagramResourceElements').models[0]);
                 includeConstants(defaultView.model.get('diagramResourceElements').models[0]);
                 return traverse((TreeRoot), finalSource);
-            },
-
-            generateTree: function () {
-                var source =  '@Source (protocol="http", host="localhost", port=8080)\n' +
-                             '@Api (tags = {"stock_info","stock_update"}, description = "Rest api for do operations on admin", produces = MediaType.APPLICATION_JSON)\n' +
-                             'package com.sample;\n' +
-                              '@Path ("/stock")\n' +
-                              '@GET\n' +
-                              '@PUT\n' +
-                              '@POST\n' +
-                             'resource passthrough (message m) {' +
-                             'log("Test");' +
-                             '}';
             },
 
             reloadDiagramArea: function () {
@@ -677,7 +671,8 @@ var Diagrams = (function (diagrams) {
             // check the current activated element's valid drops
             isActivated: function (activatedType) {
                 if (activatedType != null) {
-                    if (this.currentType() != "Resource" && this.currentType() != "EndPoint" && this.currentType() != "Source") {
+                    if (this.currentType() != "Resource" && this.currentType() != "EndPoint" && this.currentType()
+                                                                                                != "Source") {
                         // validation for active endpoints
                         if (activatedType.includes("EndPoint") || activatedType.includes("Source")) {
                             this.invalid = true;
@@ -689,7 +684,7 @@ var Diagrams = (function (diagrams) {
                 }
             },
             // Called when text controller changes occurs and if there is a parent element
-            notifyParent: function(parentModel, currentTextModel){
+            notifyParent: function (parentModel, currentTextModel) {
                 console.log("parent received it");
             }
 
@@ -734,14 +729,18 @@ var Diagrams = (function (diagrams) {
                     computedWidth = (minimumValue / 2);
                     finalTextWidth = parseFloat(rectX) + parseFloat(computedWidth);
                     this.dynamicTextPosition(finalTextWidth);
-                    rects.attr('width', function () { return minimumValue});
+                    rects.attr('width', function () {
+                        return minimumValue
+                    });
                 } else {
-                        this.dynamicRectWidth(dynamic);
-                        computedWidth = (dynamic / 2);
-                        finalTextWidth = parseFloat(rectX) + parseFloat(computedWidth);
-                        this.dynamicTextPosition(finalTextWidth);
-                        rects.attr('width', function () {return dynamic;});
-                    }
+                    this.dynamicRectWidth(dynamic);
+                    computedWidth = (dynamic / 2);
+                    finalTextWidth = parseFloat(rectX) + parseFloat(computedWidth);
+                    this.dynamicTextPosition(finalTextWidth);
+                    rects.attr('width', function () {
+                        return dynamic;
+                    });
+                }
 
                 // setting text element position on change
                 texts.attr('x', function () {
